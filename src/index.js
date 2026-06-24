@@ -42,7 +42,7 @@ const BookingSystem = () => {
  async function handleBookingSubmit(data) {
   setLoading(true);
   try {
-    const response = await fetch(GAS_ENDPOINT, {
+    await fetch(GAS_ENDPOINT, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
