@@ -7,6 +7,12 @@ const BookingSystem = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const handleDelete = (idx) => {
+  const booking = bookings[idx];
+  if (window.confirm(`ต้องการลบการจองของ ${booking.name} ใช่ไหม?`)) {
+    setBookings(bookings.filter((_, i) => i !== idx));
+  }
+};
   
   const GAS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxFc2NIs6GvS-4dihVHRgKf6k0liBkwAIoXjQRCAsBxcOe4UNXYgPBn6Sbgtm67Zt3u/exec';
   
@@ -110,7 +116,7 @@ const BookingSystem = () => {
           <AdminPanel 
   bookings={bookings} 
   timeSlots={timeSlots}
-  onDelete={(idx) => setBookings(bookings.filter((_, i) => i !== idx))}
+  onDelete={handleDelete}
 />
         )}
       </div>
