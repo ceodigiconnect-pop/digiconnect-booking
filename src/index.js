@@ -351,12 +351,16 @@ const AdminPanel = ({ bookings, timeSlots }) => {
       new Date(b.submittedAt).toLocaleString('th-TH'),
     ]);
 
-    const csv = [
+    const bom = '\uFEFF';
+    const csvContent = [
       headers.join(','),
-      ...rows.map(r => r.map(cell => `"${cell}"`).join(',')),
+      ...rows.map(r => r.map(cell => {
+        const escaped = String(cell).replace(/"/g, '""');
+        return `"${escaped}"`;
+      }).join(',')),
     ].join('\n');
 
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob([bom + csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = `bookings_${new Date().toISOString().split('T')[0]}.csv`;
