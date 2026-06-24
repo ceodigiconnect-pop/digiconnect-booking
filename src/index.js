@@ -39,36 +39,28 @@ const BookingSystem = () => {
     return bookings.some(b => b.dateKey === dateKey && b.time === time);
   };
 
-  async function handleBookingSubmit(data) {
-    setLoading(true);
-    try {
-      const form = document.createElement('form');
-      form.method = 'POST';
-      form.action = GAS_ENDPOINT;
-      form.style.display = 'none';
+ async function handleBookingSubmit(data) {
+  setLoading(true);
+  try {
+    const response = await fetch(GAS_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: 'data=' + encodeURIComponent(JSON.stringify(data))
+    });
 
-      const input = document.createElement('input');
-      input.type = 'hidden';
-      input.name = 'data';
-      input.value = JSON.stringify(data);
+    setBookings(prev => [...prev, { ...data, id: Date.now() }]);
+    setSuccessMessage('✓ จองสำเร็จ! เราจะติดต่อคุณเร็ว ๆ นี้');
+    setTimeout(() => setSuccessMessage(''), 5000);
+    setLoading(false);
 
-      form.appendChild(input);
-      document.body.appendChild(form);
-      form.submit();
-
-      setTimeout(() => {
-        setBookings(prev => [...prev, { ...data, id: Date.now() }]);
-        setSuccessMessage('✓ จองสำเร็จ! เราจะติดต่อคุณเร็ว ๆ นี้');
-        setTimeout(() => setSuccessMessage(''), 5000);
-        setLoading(false);
-      }, 500);
-
-    } catch (error) {
-      console.error('Error:', error);
-      setSuccessMessage('✗ เกิดข้อผิดพลาด');
-      setLoading(false);
-    }
+  } catch (error) {
+    console.error('Error:', error);
+    setSuccessMessage('✗ เกิดข้อผิดพลาด');
+    setLoading(false);
   }
+}
 
   return (
     <div className="min-h-screen bg-gray-50">
