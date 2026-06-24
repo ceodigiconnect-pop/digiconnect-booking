@@ -107,7 +107,11 @@ const BookingSystem = () => {
             successMessage={successMessage}
           />
         ) : (
-          <AdminPanel bookings={bookings} timeSlots={timeSlots} />
+          <AdminPanel 
+  bookings={bookings} 
+  timeSlots={timeSlots}
+  onDelete={(idx) => setBookings(bookings.filter((_, i) => i !== idx))}
+/>
         )}
       </div>
     </div>
